@@ -2,386 +2,417 @@
 
 # 🌌 3D Gen Studio
 
-**The open-source AI-powered 3D mesh production layer.**
+**The Open-Source AI-Powered 3D Mesh Production Studio & Pipeline Orchestrator**
 
-[![Website](https://img.shields.io/badge/website-3dgenstudio.com-purple.svg)](https://www.3dgenstudio.com)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/visualbruno/3DGenStudio/pulls)
-[![Discord](https://img.shields.io/badge/Discord-5865F2?logo=discord&logoColor=white)](https://discord.gg/kRFWNzFUSx)
+[![GitHub Release](https://img.shields.io/github/v/release/0xra0/3DGenStudio?style=flat-square&color=8A2BE2)](https://github.com/0xra0/3DGenStudio/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
+[![Node.js](https://img.shields.io/badge/Node.js-18%2B%20%7C%2020%2B-green.svg?style=flat-square&logo=node.js)](https://nodejs.org)
+[![Python](https://img.shields.io/badge/Python-3.10%20--%203.13-blue.svg?style=flat-square&logo=python)](https://python.org)
+[![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20Windows%20%7C%20macOS%20(Apple%20Silicon)-orange.svg?style=flat-square)]()
+[![Model Context Protocol](https://img.shields.io/badge/MCP-Supported-purple.svg?style=flat-square)](https://modelcontextprotocol.io)
 
-*Orchestrate complete 3D generation pipelines — from text-to-image, image editing, mesh generation, UV unwrapping, to texturing — all in a single visual workspace powered by ComfyUI and external APIs.*
+*Orchestrate end-to-end 3D generative pipelines — from text-to-image and multi-view generation to 3D mesh reconstruction, UV unwrapping, PBR texturing, neural auto-rigging, animation retargeting, and game engine export — all inside a unified visual workspace powered by ComfyUI, Three.js, and local AI microservices.*
 
-[**Website**](https://www.3dgenstudio.com) • [**Report Bug**](https://github.com/visualbruno/3DGenStudio/issues) • [**Discord**](https://discord.gg/kRFWNzFUSx)
-</div>
+[**Features**](#-features) • [**Architecture**](#-architecture) • [**Quick Start**](#-quick-start) • [**Installation**](#-installation-guide) • [**ComfyUI Setup**](#-comfyui-integration) • [**MCP Server**](#-model-context-protocol-mcp) • [**Docs**](#-documentation)
 
 ---
 
-## 📋 Changelog
+</div>
 
-| Date | Description |
-| --- | --- |
-| **2026-09-27** | Batch Project: Moved execution to the backend<br>Batch Project: Stage supports ComfyUI, Optimize, AutoRig and Bake<br>Assets Page: Can search/filter versions of images/meshes<br>Assets Page: Can export a list of assets<br>Export Mesh: Can flat PBR textures to albedo (mobile)<br>Export Project: Use the asset name instead of the id<br>Fixed bugs |
-| **2026-09-23** | ComfyUI: Fixed "Gen TexturedMesh with Trellis2"<br>Batch Project: Can run the batch by Stage'<br>MCP: Added functions for Batch Project<br>SetupWizard: Added Qwen Image 2.1<br>AutoRetopo: Can fix open edges<br>AutoRig: Can modify mesh orientation<br>AutoRig: Fixed crash on Linux<br>ComfyUI: Updated MeshProjection workflows<br>MeshExport: Fixed LOD Texture Size |
-| **2026-09-18** | New: Building Generator - draw a plan, the graph builds every storey<br>Bake: Fixed bug<br>MeshEditor - Optimize: Updated to latest version |
-| **2026-09-14** | New: VFX Generator<br>ImageEditor - Seamless: Improved with more options<br>ComfyUI: Added MarigoldV2 for Normals and Albedo using Qwen Image Edit |
-| **2026-09-08** | Updated ComfyUI nodes and workflows for Trellis2, Pixal3D, Hunyuan<br>MeshEditor - AutoRig: Transfer skeleton and weights to another mesh (high poly to low poly)<br>Improved AutoRig<br>Fixed Animation Editor |
-| **2026-09-07** | New: Tree Generator<br>Image Editor: Added Seamless mode |
-| **2026-09-06** | New: Assembly Editor |
-| **2026-09-03** | MeshEditor: Added Segmentation mode<br>MeshEditor - AutoRig: Improved MoCap<br>MeshEditor Auto-Rig: Can save and import custom animations<br>MeshEditor Auto-Rig: Fixed Weight Painting mode<br>MeshEditor: Reorganized Tools Menu<br>ComfyUI: Can cancel a job<br>MeshEditor AutoUV: Fixed Normals<br>MeshEditor Segmentation: Exported parts can keep the mesh texture<br>MeshEditor Bake: Fixed bugs |
-| **2026-08-30** | Multi-User: Can host the server on another machine<br>Desktop App: Check if the ports are already used<br>Graph/Kanban: Paste image directly in your project<br>MeshEditor - AutoRig: Many improvements |
-| **2026-08-27** | Animations: Integrated MoCapAnythingV2 (video-to-motion)<br>MeshEditor: Added viewport gizmo and Perspective/Orthographic view<br>Updated npm packages<br>Fixed startup speed in dev mode<br>Animations: Added Horse animations from mesh2motion<br>Kanban: "Auto Rig" preselects the current displayed mesh<br>MCP: Improved input parameters validation (useful for small local llm)<br>SetupWizard: Added Trellis2 and Pixal3D ComfyUI Native |
-| **2026-08-24** | Animations: Integrated Kimodo<br>MCP: Added support for Tags<br>ComfyUI: Updated dependencies and nodes<br>QwenVL: Added new models |
-| **2026-08-21** | Assets: Can tag assets<br>Uninstaller: Can delete your data<br>Hitem3D: Added v3.0 model<br>TripoAI: Added 8K "extreme" texture quality<br>Graph: Added missing labels for external APIs<br>Optimize and LOD export: Added more options |
-| **2026-08-19** | Bake mode: Fixed colour too dark<br>Installer: Fixed process still open<br>Updated MCP |
-| **2026-08-18** | MeshEditor new modes: Bake and Game-Ready<br>Export: Can export LOD and Collision Mesh<br>Animations: Improved human retargeting<br>Desktop App: Can see logs<br>Fixed Z-Image Turbo VAE download<br>Auto-Rig: Can edit/add/delete bones. |
-| **2026-08-15** | MeshPreviewer: Can see skeleton for rigged mesh.<br>Graph project: Added new node type "Rig Mesh"<br>Graph project: Display the mesh previewer instead of the mesh in the node<br>Kanban project: Rigging column can run "Auto Rig"<br>Kanban project: ComfyUI workflow default inputs image/mesh are the current displayed image/mesh |
-| **2026-08-09** | Batch project: Added image,mesh and boolean types. Can delete a result<br>Mesh Export: Fixed PBR material when exporting in OBJ file<br>Inpainting: Added inpainting workflows with Flux2Klein |
-| **2026-08-08** | New project type: Batch<br>Graph page: nodes keep the last parameters |
-| **2026-08-07** | Fixed bugs<br>Support for Chinese computer<br>Updated managed ComfyUI and packages<br>SetupWizard: Added SAM 3.1 model<br>Updated all image workflows |
-| **2026-07-31** | Desktop App: Install ComfyUI<br>ImageEditor: Fixed alpha transparency<br>MultiView support with Trellis2 |
-| **2026-07-28** | Fixed Desktop App on Linux<br>ComfyUI: Added Enums<br>Wireframe mode in Mesh Previewer |
-| **2026-07-27** | ComfyUI: Custom models folder<br>Mesh Export: Save last output folder<br>DB: Fixed assets linked to a project<br>Kanban: Can add more meshes and images from any column<br>Desktop App: Fixed Graph page slowness |
-| **2026-07-23** | Added Brainstorming Boards |
-| **2026-07-20** | MCP Server<br>Graph Page: Added Reorganize button<br>Graph Page: Save the last position and zoom level<br>Graph Page: Simplified Image Node Actions<br>Desktop App: Fixed Wiki<br>Desktop App: Auto-start python services in Settings<br>3D Mesh: Thumbnail is now generated by mesh-tools (python) |
-| **2026-07-16** | Mesh Preview: FBX Export (Unity, Unreal Engine)<br>Graph Page: Can import a mesh directly from the computer<br>Kanban board: Added Rigging column |
-| **2026-07-15** | MeshEditor: Auto Rig with Skintokens<br>Fixed Desktop App Setup |
-| **2026-07-10** | Desktop App Installer<br>Speed up Auto Retopo<br>Added Clean Non-Manifold Edges in Auto Retopo |
-| **2026-07-08** | Added Hitem3D API v1 |
-| **2026-07-07** | Fixed slowness when queuing multiple ComfyUI workflows<br>SetupWizard: Added Gen Mesh with Hy2.0<br>MeshEditor - Projection: Fixed Blend overlap seams with original texture |
-| **2026-07-04** | Projects can be exported/imported<br>DB has been restructured and simplified<br>SetupWizard: Added Sam3.1 Segmentation + Gen Mesh with Hy2.1 |
-| **2026-07-03** | Mesh Editor: Added Optimize mode<br>Setup Wizard: Added Boogu Image and Image Editor<br>Kanban: Added a Name field for Image Generation<br>Image Editor: Can choose a name for saved image<br>OpenAI: Added gpt-image-2 model |
-| **2026-07-01** | Added a python server<br>Mesh Editor : Added experimental "Auto UV" and "Auto Retopo" |
-| **2026-06-28** | Can navigate on different pages during a ComfyUI workflow execution<br>SetupWizard: Added Krea2 Turbo<br>Server can be configured on another machine/port |
-| **2026-06-24** | Mesh Editor: Added Wireframe toggle<br>Workflows: Can be shared<br>Tripo AI: Updated to v3<br>Graph Page: Fixed name used to save a mesh from an API<br>Run.bat: Fixed slowness |
-| **2026-06-22** | Can delete Mesh Versions in Assets page<br>Fixed "Seam Smoothing" in MeshEditor Projection<br>Added Flux2Klein 4B |
-| **2026-06-17** | Added Info Icon in GraphPage: Last Parameters used<br>ComfyUI workflows are sorted by name everywhere<br>Fixed bug in MeshEditor when ComfyUI crashes |
-| **2026-06-16** | Assets page: Can group by project and improved Workflows layout<br>Cleaned Projects page and added rename button<br>MeshEditor Projection: Drawing mask is asynchronous |
-| **2026-06-15** | Can export mesh from MeshPreviewer and MeshEditor<br>Improved Projection in MeshEditor<br>Added/Updated example workflows |
-| **2026-06-12** | MeshEditor - Projection : Can use a Mask<br>Textbox : Can use a ComfyUI workflow to generate a text |
-| **2026-06-09** | Can drag and drop images directly from your computer into your project<br>Added "Set as default" checkbox for ComfyUI Workflows<br>Kanban page: Can add a mesh directly in Mesh Gen column<br>Generated mesh is now a child of parent mesh |
-| **2026-06-05** | Refactored the code<br>Fixed MeshEditor<br>Added more workflows |
-| **2026-06-03** | Mesh Editor - Projection Mode: GPU Processing and Improved seams<br>Image Editor: New ComfyUI mode in AI<br>Graph page: Text node can generate text with ComfyUI<br>Setup Wizard: Added Flux2Dev and Flux2Klein9B |
-| **2026-05-29** | Added Setup Wizard<br>Added a Wiki |
-| **2026-05-23** | Mesh Editor : Projection mode can sent Textured/Untextured view to ComfyUI<br>Fixed delete a project |
-| **2026-05-21** | Fixed bugs |
-| **2026-05-20** | Mesh Editor: New Projection mode<br>Renamed Boolean mode by Displace |
-| **2026-05-15** | Mesh Editor: Fixed modifications applied between modes |
-| **2026-05-14** | Mesh Editor: Added new Boolean mode |
-| **2026-05-07** | Image Editor: Added an experimental Shadow Remover<br>Image Editor: Can draw and erase the Base Layer<br>Notifications: Display errors in notifications panel<br>Graph Page: Can drag output connector to the workflow |
-| **2026-05-05** | Can generate Mesh using Tripo AI and Tencent Cloud<br>Image Editor : Added Zoom-In/Out feature |
-| **2026-05-04** | New Image Editor |
-| **2026-05-03** | Support of abr file (Adobe Brush)<br>Improved performances in Graph mode<br>Fixed bugs in Mesh Editor with the brushes |
-| **2026-05-02** | Added "Sculpting" mode in MeshEditor<br>Implemented "Search Assets"<br>Improved Modeling mode in Mesh Editor |
-| **2026-04-30** | Painting mode: Added Layer selection<br>Can erase a layer using a brush<br>Fixed drawing on UV seams |
-| **2026-04-29** | Added "Painting" mode in MeshEditor |
-| **2026-04-28** | Added AssetSelector Dialog<br>MeshEditor: Added dropdowns for the inputs<br>Added real system metrics in the footer<br>Improved loading time in Mesh Editor<br>Fixed parent in Graph mode |
-| **2026-04-27** | Improved Inpainting in Mesh Editor |
-| **2026-04-25** | Improved the details of Inpainting in Mesh Editor |
-| **2026-04-24** | Added Inpainting function in Mesh Editor<br>Added ComfyUI workflow examples |
-| **2026-04-21** | Added Graph Node "Image Compare"<br>Improved a bit the "Mesh Editor" (not good yet) |
-| **2026-04-19** | Improve the way to import ComfyUI workflows<br>Added a draft version of Mesh Editor<br>Added Change Log in Projects page |
-| **2026-04-19** | First release |
+## 📖 Overview
+
+**3D Gen Studio** bridges the gap between state-of-the-art generative 2D/3D AI models and production game engines (Unreal Engine, Unity, Godot, Blender). Rather than juggling disparate Python scripts, command-line tools, and web services, 3D Gen Studio unifies the entire workflow into a local-first visual operating system.
+
+### Why 3D Gen Studio?
+- 🔒 **Local-First & Private:** Everything runs on your own hardware or private network. Your assets, prompts, models, and databases stay strictly under your control.
+- 🔄 **Flexible Production Views:** Seamlessly switch between an intuitive **Kanban board** for asset lifecycle tracking and an expressive **Node Graph** for complex pipeline composition.
+- 🛠️ **Full Mesh Post-Processing Suite:** Built-in sculpting, brush painting, automatic UV parameterization, CUDA-accelerated retopology, normal/AO baking, and game-ready budget validation.
+- 🦴 **AI Auto-Rigging & Motion:** Neural skeleton estimation via SkinTokens, video-to-motion MoCap via MoCapAnything, and text-to-motion generation via Kimodo (Meta Llama 3).
+- 🏗️ **Procedural Generators:** Create multi-storey architectural buildings from 2D floorplans, algorithmic trees with wind shader vertex attributes, and particle VFX with cross-engine export.
+- 🤖 **Model Context Protocol (MCP) Native:** Connect Claude Desktop, Cursor, or autonomous LLM agents directly to your studio to inspect assets, run ComfyUI workflows, and execute batch pipelines programmatically.
+
+---
+
+## 🏗️ Architecture
+
+```mermaid
+flowchart TD
+    subgraph Client["🖥️ Frontend & Desktop"]
+        UI["React 19 + Vite + Tailwind"]
+        Three["Three.js / React Three Fiber Viewport"]
+        Electron["Electron Shell (Cross-Platform Desktop)"]
+    end
+
+    subgraph Backend["⚙️ Studio Core Backend (Node.js Express)"]
+        Server["Express API & WebSocket Gateway :3001"]
+        DB[("SQLite (Local) / PostgreSQL (Multi-User)")]
+        MCPServer["MCP Server (stdio / HTTP)"]
+    end
+
+    subgraph Services["🐍 Specialized AI & Mesh Microservices"]
+        PyServer["Python Mesh-Tools (FastAPI/uv) :8000\n(AutoUV, AutoRetopo, Baking, FBX, Repair)"]
+        SkinTokens["SkinTokens Rigging Server :8001\n(Neural Skeleton & Weight Estimation)"]
+        MoCap["MoCapAnything Server :8002\n(Video-to-Motion Tracking)"]
+        Kimodo["Kimodo Motion Server :8003\n(Text-to-Motion via LLM2Vec / Llama 3)"]
+    end
+
+    subgraph Generative["🎨 Generative AI Engines"]
+        ComfyUI["Local / Remote ComfyUI Instance\n(Trellis 2, Pixal3D, Hunyuan3D, UltraTex, Flux)"]
+        ExtAPI["External AI APIs (Tripo3D, Tencent Cloud, Fal.ai)"]
+    end
+
+    subgraph Engines["🎮 Production Target Engines"]
+        Unreal["Unreal Engine (GLB / FBX / PBR / Collision)"]
+        Unity["Unity (Mesh + Rig + VFX Graph Export)"]
+        Blender["Blender (.blend / FBX / OBJ)"]
+    end
+
+    UI <--> Server
+    Electron --> UI
+    Server <--> DB
+    MCPServer <--> Server
+    Server <--> PyServer
+    Server <--> SkinTokens
+    Server <--> MoCap
+    Server <--> Kimodo
+    Server <--> ComfyUI
+    Server <--> ExtAPI
+    PyServer --> Engines
+```
 
 ---
 
 ## ✨ Features
 
-Switch between **Kanban** and **Graph** views to manage and visualize your entire 3D production pipeline in the way that suits your style.
+### 📋 Kanban Production Pipeline
+Organize assets through standardized stages: `Images` → `Image Edit` → `Mesh Gen` → `Mesh Edit` → `Texturing` → `Export`.
+- **Drag-and-Drop Workflow:** Move assets across lifecycle phases with live status updates.
+- **In-Card Asset Carousel:** Browse multi-angle renders, wireframes, and historical version variants.
+- **Inline Action Triggers:** Launch ComfyUI nodes or external APIs directly from a card.
+- **Custom Tags & Metadata:** Categorize assets by project, style, polygon budget, and target engine.
 
-### 📋 Kanban Board
-Manage your 3D assets as cards flowing through automated pipeline stages — `Images` → `Image Edit` → `Mesh Gen` → `Mesh Edit` → `Texturing`.
-- 🗂️ **Drag-and-drop** cards between pipeline stages
-- 🎠 **In-card image carousel** with variant browsing
-- ⚡ **Per-card ComfyUI & API** action triggers
-- 🏷️ **Custom attributes** & metadata tagging
+### 🕸️ Visual Node Graph
+Assemble complex, multi-branch pipelines visually using an intuitive node canvas powered by `@xyflow/react`.
+- Connect image generation nodes to background removers, normal estimators, and 3D mesh generators.
+- Expose ComfyUI workflow parameters directly inside node inspectors.
+- Chain outputs automatically: image outputs feed mesh generators, which feed texture projectors, which feed LOD bakers.
+- Full undo/redo, auto-layout reorganization, and persistent zoom/pan states.
 
-### 🕸️ Node Graph
-Visualize the relationships between your assets as a node graph. Connect image sources to edit nodes, mesh generators, and export pipelines.
-- 👁️ **Visual node-based** asset relationships
-- 🔍 **Click any node** to open the inspector panel
-- 🎛️ **ComfyUI workflow parameters** inline
-- 🚀 **Start workflows** with one click
+### 🎨 3D Mesh Editor & Sculpting Studio
+An integrated Three.js 3D viewport tailored for direct asset inspection and modification:
+- **PBR Viewport:** Real-time physically based rendering (Roughness, Metallic, Normal, AO, Emissive) with environment HDR maps, orthographic/perspective toggles, and wireframe overlays.
+- **Sculpting & Modeling:** Sculpt meshes using brushes (Standard, Clay, Inflate, Smooth, Flatten, Pinch, Grab) and vertex displacement with tessellation.
+- **Texture Projection & Inpainting:** Project ComfyUI inpainting results onto selected UV islands with seam-smoothing shaders.
+- **UltraTex Integration:** Multi-view neural texturing for ultra-crisp 4K PBR surface detail.
+- **Automatic UV Unwrapping (Auto UV):** Clean, non-overlapping UV atlas generation powered by xatlas.
+- **Automatic Retopology (Auto Retopo):** CUDA-accelerated remeshing for quad/tri optimization, non-manifold edge removal, and open boundary repair.
+- **Texture Baking:** High-to-low poly baking of Normal (DirectX & OpenGL), Ambient Occlusion, Tangent, and Position maps.
+- **Optimization & LOD Chains:** Generate multi-resolution LODs (LOD0 through LOD3) and convex collision hulls via `gltfpack` and `meshoptimizer`.
+- **Game-Ready Engine Auditor:** Automated validation against target engine budgets (triangle count, draw calls, UV coverage, non-manifold geometry, transform scale, and pivot positioning).
 
-### 📚 Assets Library
-A centralized library for all your images, meshes, and ComfyUI workflows. Browse, filter, and import assets directly into any project.
-- 📦 **Unified view:** Images, Meshes, Workflows
-- ⏱️ **Version tracking** per asset
-- 📥 **One-click import** into project
-- 📄 **File format badges** (PNG, GLB, OBJ, EXR)
+### 🦴 AI Auto-Rigging & Animation Studio
+- **Neural Skeleton Generation:** Powered by **SkinTokens**, automatically infer humanoid/creature skeletons and skinning weights from arbitrary 3D geometry without manual bone placement.
+- **Skeleton & Weight Editing:** Adjust bone positions, rename joints, edit vertex weights, or transfer existing armatures from high-poly reference meshes to optimized low-poly meshes.
+- **Video-to-Motion (MoCapAnything):** Extract 3D skeletal motion from monocular reference video clips.
+- **Text-to-Motion (Kimodo):** Synthesize animations directly from natural language prompts using LLM2Vec and Meta Llama 3 embeddings.
+- **Animation Retargeting:** Retarget animations onto custom humanoid skeletons and export as standard FBX or animated GLTF/GLB.
 
-### 🔌 Powerful Integrations
--  **ComfyUI Native:** Run any ComfyUI workflow directly from a card or node. Pass dynamic parameters, capture outputs, and chain results automatically.
--  **External API Support:** Integrate any REST or GraphQL API. Tag cards with API endpoints and trigger generation via any 3rd party 3D service.
+### 🏛️ Procedural Building Generator
+- Draw 2D architectural footprints and wall layouts in a vector canvas.
+- Automatically extrude and construct multi-storey buildings with parametric floors, roof styles (gable, hip, flat, stacked), trim profiles, and slot meshes for doors and windows.
+- Export parametric style packs and Intermediate Representation (IR) graphs.
 
-### 💾 Local-First Storage
-Projects are stored as locally on disk — Git-syncable, portable across machines, and strictly no cloud lock-in.
+### 🌳 Procedural Tree Generator
+- Algorithmic plant generation with configurable branching density, trunk taper, crown radius, and leaf particle distributions.
+- Built-in vertex color baking for wind simulation shaders in Unreal and Unity.
 
----
+### ✨ Procedural VFX Generator
+- Visual node graph for particle emitters, turbulence fields, burst dynamics, and material shaders.
+- Cross-engine export bundles with automated Intermediate Representation (IR) mapping for Unity (VFX Graph / Shuriken) and Unreal Engine (Niagara).
 
-## 🚀 Workflow
+### 🧩 Assembly Editor
+- Compose complex multi-part props, vehicles, and modular kits.
+- Parametric snapping, bounding box alignment, and hierarchical scene tree management.
 
-Each stage feeds the next. Use **ComfyUI** workflows or external APIs at any step — the results automatically flow to the next card in your board!
+### ⚡ Batch Project Runner
+- Execute batch pipelines across hundreds of assets unattended.
+- Automate multi-step pipelines: ComfyUI image-to-mesh → Auto Retopo → Rig Transfer → Normal/AO Bake → Flatten to Albedo → Multi-LOD Export.
 
-1. **Create / Import an Image:** Start with a text-to-image generation via ComfyUI, import an existing asset, or use an external API. Results land in the Images column.
-2. **Edit & Refine:** Apply image edits — inpainting, normal map generation, background removal. Cards automatically move to Image Edit.
-3. **Generate 3D Mesh:** Trigger a mesh generation workflow (e.g. TripoSR, Wonder3D). GLB/OBJ output moves the card to Mesh Gen.
-4. **UV & Texture:** Run automatic UV unwrapping and texture projection workflows. Layer multiple textures, apply normal maps, and preview results.
-5. **Export & Publish:** Export your finished mesh as GLB, OBJ, or EXR directly to your library. Track real-time status in the Action Log.
-
----
-
-## <img src="https://github.com/user-attachments/assets/d2304bbc-4c89-4b61-8d35-17fe9195e6c8" width="32" height="32" align="left" style="padding-right: 10px">Mesh Editor
-
-1. **Texturing:** With ComfyUI, improve the details of your texture directly on the mesh or change it completely for your needs.
-2. **Modeling:** Basic features to edit the faces and vertices of your mesh, fix issues.
-3. **Sculpting:** Basic sculpting features (Standard, Clay, Inflate, Smooth, Flatten, Pinch, Grab).
-4. **Painting:** Paint directly on your mesh using brushes/images.
-5. **Displace:** Use a brush to displace the vertices with tessellation.
-6. **Projection:** With ComfyUI, project views on the mesh to get higher texture quality.
-7. **Auto UV:** Automatically unwrap your mesh to generate clean UV coordinates.
-8. **Auto Retopo:** Automatically retopologize your mesh for a cleaner, optimized topology (with non-manifold edge cleanup).
-9. **Auto Rig:** Automatically generate a skeleton and skin weights for your mesh using AI, retarget reference animations onto it, or generate one from a text prompt with **Kimodo** (see licensing below).
-10. **Optimize / LOD:** Reduce triangles, generate an LOD chain and convex collision hulls.
-11. **Bake:** Bake normal / AO / position maps between meshes.
-12. **Game-Ready:** Check the mesh against engine budgets — triangles, topology, UVs, materials, scale and pivot.
-
----
-
-## 📸 Showcase
-
-<details open>
-<summary><b>Kanban Dashboard</b></summary>
-<br>
-<img width="100%" alt="Kanban Dashboard" src="https://github.com/user-attachments/assets/8968d0f8-2b70-41d4-870e-4031b1f521f7" />
-</details>
-
-<details>
-<summary><b>Assets Library</b></summary>
-<br>
-<img width="100%" alt="Assets Library 1" src="https://github.com/user-attachments/assets/6fa89b0d-c630-4d17-a775-b18fecf9e60b" />
-<img width="100%" alt="Assets Library 2" src="https://github.com/user-attachments/assets/3d5aeedb-f734-4e98-98f8-d0a965fba187" />
-</details>
-
-<details>
-<summary><b>Mesh Preview / Viewer</b></summary>
-<br>
-<img width="100%" alt="Mesh Preview" src="https://github.com/user-attachments/assets/5ad29bb2-1937-45d7-a598-15dd637687a5" />
-</details>
-
-<details>
-<summary><b>Workflow / ComfyUI Integration</b></summary>
-<br>
-<img width="100%" alt="Workflow" src="https://github.com/user-attachments/assets/23d045f1-3789-47e7-8fba-22ebdd837b03" />
-</details>
-
-<details>
-<summary><b>MeshEditor / Inpainting</b></summary>
-<br>
-<img width="100%" alt="MeshEditor Inpainting" src="https://github.com/user-attachments/assets/b8488a4d-dd03-4aa0-abb0-3c222997e21a" />
-
-</details>
+### 📚 Centralized Assets Library
+- Unified search, tagging, and version control for images, meshes (GLB, OBJ, FBX), textures, and ComfyUI workflow JSONs.
+- Instant 3D thumbnail generation and one-click import into active projects.
 
 ---
 
-## 🛠️ Installation
+## 🤖 Model Context Protocol (MCP)
 
-### Prerequisites
-Before starting, make sure you have:
-- `Node.js` and `npm` installed
-- A running `ComfyUI` installation
+3D Gen Studio exposes a full **Model Context Protocol (MCP)** server (`npm run mcp:stdio`), enabling LLM agents (Claude Desktop, Cursor, ChatGPT, Antigravity) to act as autonomous technical artists.
 
-### Quick Start
+### Adding to Claude Desktop
 
-```bash
-# 1. Clone the repository
-git clone https://github.com/visualbruno/3DGenStudio.git
-cd 3DGenStudio
+Add the following to your Claude Desktop configuration (`~/.config/Claude/claude_desktop_config.json` on Linux/macOS or `%APPDATA%\Claude\claude_desktop_config.json` on Windows):
 
-# 2. Install dependencies
-npm install
-
-# 3. Start the application
-npm run dev
-
-# 4. From another command line, configure and start python server in python-server folder
-cd python-server
-python -m venv .venv
-.venv\Scripts\activate
-pip install -r requirements.txt
-python main.py
-```
-
-> [!NOTE] 
-> This starts the backend server on `http://localhost:3001` and the Vite frontend development server.
-
-### First launch on macOS
-
-> [!IMPORTANT]
-> macOS builds are **Apple Silicon only** (M1 and later). Intel Macs are not
-> supported: the Mesh Tools service needs Blender's `bpy` module, which no longer
-> ships for macOS Intel.
-
-The desktop app is ad-hoc signed but not yet notarized by Apple, so macOS blocks
-the first launch with:
-
-> Apple could not verify "3D Gen Studio" is free of malware that may harm your
-> Mac or compromise your privacy.
-
-This is Gatekeeper's standard warning for an app from outside the App Store, not
-a problem with the download. To allow it:
-
-1. Click **Done** on the dialog.
-2. Open  **System Settings → Privacy & Security**.
-3. Scroll to the security section — *"3D Gen Studio was blocked to protect your
-   Mac"* — and click **Open Anyway**.
-4. Authenticate, then confirm **Open Anyway** once more.
-
-macOS remembers the decision; later launches open normally. On macOS 15 and
-later, **Control-click → Open no longer works** for this — System Settings is
-the only route.
-
-Equivalent one-liner, if you prefer the terminal:
-
-```bash
-xattr -dr com.apple.quarantine "/Applications/3D Gen Studio.app"
-```
-
-> [!NOTE]
-> If macOS instead says the app **"is damaged and can't be opened"**, that is a
-> different (and fixed) problem — see [docs/DESKTOP_BUILD.md](docs/DESKTOP_BUILD.md).
-
-### Configuration
-Open the application and configure your services in the settings area:
-- `ComfyUI` path / host / port
-- External API credentials
-- Optional custom endpoints
-
-### Serving over a LAN or a reverse proxy
-
-Build once (`npm run build`) and run `npm start` — the backend serves the UI and
-the API from the same origin, so it works from any host or port without a
-rebuild.
-
-> [!IMPORTANT]
-> Leave `VITE_SERVER_ORIGIN` **unset** for production builds, LAN servers
-> included. It is baked into `dist/` at build time, which pins the bundle to one
-> host/port and breaks as soon as a proxy or a different address is used.
-
-Behind a reverse proxy, the app needs to know the address **clients** use, since
-generated image and mesh URLs are absolute. Either forward the standard headers:
-
-```nginx
-location / {
-    proxy_pass http://127.0.0.1:3001;
-    proxy_set_header Host              $http_host;   # $http_host keeps the port, $host drops it
-    proxy_set_header X-Forwarded-Host  $http_host;
-    proxy_set_header X-Forwarded-Proto $scheme;
-    proxy_set_header X-Forwarded-Port  $server_port;
+```json
+{
+  "mcpServers": {
+    "3dgenstudio": {
+      "command": "node",
+      "args": ["/path/to/3DGenStudio/mcp/stdio.js"]
+    }
+  }
 }
 ```
 
-…or pin the public address explicitly, which overrides everything above:
-
-```bash
-PUBLIC_BASE_URL=https://studio.example.com:4443 npm start
-```
-
-The resolved external base URL is printed on the first request — if the host,
-scheme or port in that line is not what clients use, images will load blank
-while the API keeps working. Set `TRUST_PROXY_HEADERS=0` to ignore forwarded
-headers when the server is exposed directly.
+### Key MCP Capabilities
+- `list_projects` / `get_project`: Query projects, cards, and canvas nodes.
+- `create_asset` / `import_mesh`: Ingest images, 3D meshes, and animations.
+- `run_comfy_workflow`: Trigger ComfyUI generation pipelines with dynamic input overrides.
+- `execute_batch`: Run automated batch processing across asset collections.
+- `inspect_mesh`: Query vertex counts, manifoldness, UV layout, and game-engine readiness budgets.
+- `apply_retopo` / `apply_autorig`: Trigger remote Python processing tools programmatically.
 
 ---
 
 ## 💻 Tech Stack
 
-| Domain | Technologies |
+| Domain | Technologies & Libraries |
 | :--- | :--- |
-| **Frontend** | React, Vite, React Router, Three.js, `@react-three/fiber`, `@react-three/drei` |
-| **Backend** | Node.js, Express, Multer |
-| **Data & Storage** | SQLite, LowDB, Local Asset Storage |
-| **Integrations** | ComfyUI, External AI APIs, REST/GraphQL |
+| **Frontend UI** | React 19, Vite 8, React Router 7, TailwindCSS, `@xyflow/react`, Excalidraw |
+| **3D Engine** | Three.js, `@react-three/fiber`, `@react-three/drei`, `three-bvh-csg`, `three-mesh-bvh` |
+| **Desktop Shell** | Electron 43, `electron-builder` |
+| **Backend Core** | Node.js (ESM), Express 5, WebSocket (`ws`), Multer |
+| **Data & Storage** | SQLite3 (Desktop / Single-User), PostgreSQL (`pg`, Multi-User Server), LowDB |
+| **Python Mesh Tools** | Python 3.10–3.13, FastAPI, `uv`, Trimesh, PyVista, xatlas, Blender `bpy`, NVIDIA Warp, CuPy |
+| **Neural AI Services** | ComfyUI, SkinTokens (Auto-Rigging), MoCapAnything (Video MoCap), Kimodo (Llama 3 Text-to-Motion) |
+| **Mesh Optimization** | `meshoptimizer`, `gltfpack` |
+| **AI Protocol** | Model Context Protocol (`@modelcontextprotocol/sdk`) |
 
 ---
 
-## Documentation
+## ⚡ Quick Start
 
-A complete Wiki is included with the application.
+### Prerequisites
+- **Node.js**: `18.x`, `20.x`, or higher ([Download Node.js](https://nodejs.org))
+- **Python**: `3.10` to `3.13` (Astral [`uv`](https://astral.sh/uv) will auto-provision Python if not installed)
+- **Git**: With Git LFS installed (`git lfs install`)
+- **GPU (Optional, Recommended)**: NVIDIA GPU with CUDA 11.8+ or 12.x for accelerated neural retopo and rigging. CPU fallback is fully supported.
+
+### One-Click Launch
+
+#### Linux / macOS:
+```bash
+git clone https://github.com/0xra0/3DGenStudio.git
+cd 3DGenStudio
+chmod +x run.sh
+./run.sh
+```
+
+#### Windows:
+```cmd
+git clone https://github.com/0xra0/3DGenStudio.git
+cd 3DGenStudio
+run.bat
+```
+
+> **Note:** On first startup, `run.sh` / `run.bat` installs Node dependencies, provisions the Python environment via `uv`, downloads necessary wheels, and launches the application at `http://localhost:5173`.
 
 ---
 
-## 🙏 Acknowledgments
+## 🛠️ Installation Guide
 
-3D Gen Studio builds on the great work of the open-source community. Special thanks to:
+If you prefer to configure each subsystem individually:
 
-- [**SkinTokens**](https://github.com/VAST-AI-Research/SkinTokens) — used in **Auto Rig** for AI-powered skeleton generation and skinning.
-- [**mesh2motion-app**](https://github.com/Mesh2Motion/mesh2motion-app) — used in **Auto Rig** for skeleton/animation reference.
-- [**excalidraw**](https://github.com/excalidraw/excalidraw) — used for Brainstorming Boards.
-- [**kimodo**](https://github.com/nv-tlabs/kimodo) — used for text-to-motion.
+### 1. Core Web Application (Node.js + Vite)
+
+```bash
+# Clone the repository
+git clone https://github.com/0xra0/3DGenStudio.git
+cd 3DGenStudio
+
+# Install JavaScript dependencies
+npm install
+
+# Start both Node backend (port 3001) and Vite frontend (port 5173)
+npm run dev
+```
+
+### 2. Python Mesh-Tools Service
+
+The Python service handles heavy geometric computations (UV unwrapping, retopology, repair, baking, FBX export, thumbnail generation).
+
+```bash
+cd python-server
+
+# On Linux/macOS using run.sh (automatically installs uv, python 3.13 venv, and CUDA cupy):
+bash run.sh
+
+# Or manually:
+python3 -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+
+# For NVIDIA GPU acceleration (Auto Retopo & Baking):
+pip install -r requirements-nvidia.txt
+python detect_cuda.py  # installs matching cupy-cudaXXx package
+
+python main.py
+```
+*The mesh-tools service runs at `http://localhost:8000` (configurable via `MESHTOOLS_PORT`).*
+
+### 3. Optional AI Microservices
+
+#### A. SkinTokens (Neural Auto-Rigging)
+```bash
+cd thirdparty/skintokens
+bash run_server.sh  # Windows: run_server.bat
+```
+*Runs on `http://localhost:8001`. Automatically downloads pretrained skeleton & skin weight prediction checkpoints.*
+
+#### B. MoCapAnything (Video-to-Motion)
+```bash
+cd thirdparty/mocapanything
+bash run_server.sh  # Windows: run_server.bat
+```
+*Runs on `http://localhost:8002`. Allows uploading MP4/MOV videos to extract 3D joint motion.*
+
+#### C. Kimodo (Text-to-Motion with Meta Llama 3)
+```bash
+cd thirdparty/kimodo
+bash run_server.sh
+```
+*Requires accepting the [Meta Llama 3 Community License](META-LLAMA-3-LICENSE) in Studio Settings.*
 
 ---
 
-## ⚖️ Kimodo & Meta Llama 3 licensing
+## 🎨 ComfyUI Integration
 
-**Built with Meta Llama 3.**
+3D Gen Studio seamlessly connects to local or networked ComfyUI instances.
 
-Motion generation (**Mesh Editor → Auto Rig → Kimodo**) is optional and off by
-default. If you install it, be aware of what it pulls in and under which terms.
+1. **Start ComfyUI:** Ensure your ComfyUI server is running (default: `http://127.0.0.1:8188`).
+2. **Configure Studio:** In 3D Gen Studio, navigate to **Settings → ComfyUI** and set your ComfyUI host and port.
+3. **Pre-Built Workflows:** Explore the included workflows under `comfyui_workflows/`:
+   - `Trellis2_MeshGen.json` — Fast multi-view to 3D mesh synthesis
+   - `Pixal3D_Reconstruction.json` — Dense PBR mesh generation
+   - `Hunyuan3D_2.1.json` — High-fidelity image-to-3D
+   - `UltraTex_PBR_Paint.json` — High-resolution texture painting & projection
+   - `Marigold_Normal_Albedo.json` — Normal map & diffuse estimation
+   - `Flux_Inpainting.json` — Seam healing and text-guided texture touch-up
 
-| Component | Source | License |
+---
+
+## 🐳 Docker & Multi-User Server Deployment
+
+For studio teams or NAS hosting with PostgreSQL:
+
+```bash
+# Copy and configure the environment template
+cp .env.docker.example .env
+
+# Edit database credentials and JWT secret
+nano .env
+
+# Launch with Docker Compose
+docker-compose up -d
+```
+
+The Docker stack boots:
+- `genstudio-server`: The Node.js Express backend and compiled UI on port `3001`
+- `genstudio-postgres`: PostgreSQL database with automated migrations
+- Persistent asset storage mounted under `./data/assets`
+
+### Reverse Proxy Configuration (Nginx / Caddy)
+When hosting behind Nginx or Traefik, forward client host headers so generated asset URLs resolve properly:
+
+```nginx
+server {
+    listen 80;
+    server_name studio.yourdomain.com;
+
+    location / {
+        proxy_pass http://127.0.0.1:3001;
+        proxy_set_header Host              $http_host;
+        proxy_set_header X-Forwarded-Host  $http_host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Port  $server_port;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+}
+```
+Or override the public URL explicitly:
+```bash
+PUBLIC_BASE_URL=https://studio.yourdomain.com npm start
+```
+
+---
+
+## 📦 Desktop Application Packaging
+
+You can package 3D Gen Studio as a standalone desktop executable for offline usage:
+
+```bash
+# Package for your current operating system
+npm run dist
+
+# Target-specific platform builds:
+npm run dist:linux    # Generates .AppImage / .deb in release/
+npm run dist:win      # Generates NSIS installer (.exe) in release/
+npm run dist:mac      # Generates Apple Silicon .dmg in release/
+```
+
+> **macOS Note:** Builds are Apple Silicon only (M1+). Because Blender `bpy` no longer supports macOS x86_64, Intel Macs are not supported. If Gatekeeper alerts on first launch, run:
+> ```bash
+> xattr -dr com.apple.quarantine "/Applications/3D Gen Studio.app"
+> ```
+
+---
+
+## ⚙️ Configuration Reference
+
+Key environment variables configurable in `.env` or system environment:
+
+| Variable | Default | Description |
 | :--- | :--- | :--- |
-| Kimodo | [nv-tlabs/kimodo](https://github.com/nv-tlabs/kimodo) | Apache&nbsp;2.0 — `thirdparty/kimodo/LICENSE` |
-| Kimodo-SOMA checkpoint (~1.1&nbsp;GB) | [nvidia/Kimodo-SOMA-RP-v1.1](https://huggingface.co/nvidia/Kimodo-SOMA-RP-v1.1) | NVIDIA's model card terms |
-| LLM2Vec | [McGill-NLP/llm2vec](https://github.com/McGill-NLP/llm2vec) | MIT — `thirdparty/kimodo/ATTRIBUTIONS.MD` |
-| **Meta Llama&nbsp;3-8B-Instruct (~16&nbsp;GB)** | Hugging Face | **[Meta Llama 3 Community License](META-LLAMA-3-LICENSE)** |
-
-Kimodo turns your prompt into a motion embedding with **LLM2Vec**, which is built on
-**Meta Llama 3** — so installing motion generation downloads Meta Llama 3-8B-Instruct
-weights, and your use of them is governed by Meta's license.
-
-### What that means for you
-
-- **You must accept the license before installing.** The desktop installer shows the
-  full text when you tick *Motion Generation (Kimodo)* and will not proceed until you
-  accept; the same gate is in **Settings → Mesh Tools → Motion Generation**. The
-  acceptance is recorded in the app's data folder.
-- **The weights are not redistributed by this project.** 3D Gen Studio ships no Llama
-  weights: they are downloaded from Hugging Face, by you, onto your machine, when you
-  opt in.
-- **Attribution.** If you redistribute the Llama Materials or build a product on them,
-  the license requires you to display *"Built with Meta Llama 3"*, to ship a copy of
-  the agreement, and to prefix any AI model you distribute that was created with them
-  with *"Llama 3"*.
-- **Acceptable use.** Your use must follow Meta's
-  [Acceptable Use Policy](https://llama.meta.com/llama3/use-policy).
-- **Large operators.** If your products had more than 700 million monthly active users
-  in the month before the Llama 3 release date, you need a separate license from Meta.
-- **No warranty.** The Llama Materials are provided "as is" — see sections 3 and 4 of
-  the agreement.
-
-> Meta Llama 3 is licensed under the Meta Llama 3 Community License, Copyright ©
-> Meta Platforms, Inc. All Rights Reserved.
-
-The complete agreement ships with the app and is in this repository as
-[`META-LLAMA-3-LICENSE`](META-LLAMA-3-LICENSE); Meta publishes it at
-<https://llama.meta.com/llama3/license>.
-
-If you would rather not accept it, leave Kimodo uninstalled — every other feature,
-including **Auto Rig** and the reference **Animations** library, works without it.
+| `PORT` | `3001` | Express backend server port |
+| `MESHTOOLS_PORT` | `8000` | Python mesh-tools service port |
+| `SKINTOKENS_PORT` | `8001` | SkinTokens auto-rig service port |
+| `MOCAP_PORT` | `8002` | MoCapAnything video-to-motion port |
+| `COMFYUI_URL` | `http://127.0.0.1:8188` | ComfyUI server address |
+| `PUBLIC_BASE_URL` | *Unset* | Explicit public URL when running behind NAT/reverse proxy |
+| `TRUST_PROXY_HEADERS` | `1` | Parse `X-Forwarded-*` headers (`0` to disable) |
+| `DATABASE_URL` | *Unset (SQLite)* | PostgreSQL connection string (`postgresql://user:pass@host:5432/db`) |
+| `JWT_SECRET` | *Auto-generated* | Secret key for multi-user authentication tokens |
 
 ---
 
-## 🤝 Contributing & Support
+## 📚 Documentation & Guides
 
-Have a question or an idea? Whether you want to report a bug, suggest a feature, or just say hello:
-- 🐛 [Open an issue on GitHub](https://github.com/visualbruno/3DGenStudio/issues)
-- 💬 [Start a Discussion](https://github.com/visualbruno/3DGenStudio/discussions)
+Comprehensive guides are located in the `docs/` folder:
+- [ComfyUI Integration Guide](docs/ComfyUI.md) & [Managed ComfyUI Setup](docs/COMFYUI_MANAGED.md)
+- [Building Graph Schema & IR Specification](docs/BUILDING_GRAPH_SCHEMA.md)
+- [VFX Engine Mapping & Unity/Unreal Export](docs/VFX_ENGINE_MAPPING.md)
+- [Model Context Protocol (MCP) Guide](docs/mcp.md)
+- [Desktop Packaging & Build Guide](docs/DESKTOP_BUILD.md)
+- [Dependency & Override Notes](docs/DEPENDENCIES.md)
 
+---
 
-### Support the Project!
-[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/visualbruno)
+## ⚖️ Licensing & Attributions
 
-<p align="center">
-  <br>
-  <b><a href="https://www.3dgenstudio.com/privacy-policy.html">Privacy Policy</a></b> •
-  <b><a href="https://www.3dgenstudio.com/terms-and-conditions.html">Terms of Service</a></b>
-</p>
+- **Core Application:** Released under the [MIT License](LICENSE).
+- **Kimodo Motion Service:** Powered by [Kimodo](https://github.com/nv-tlabs/kimodo) (Apache 2.0) and [LLM2Vec](https://github.com/McGill-NLP/llm2vec) using Meta Llama 3 weights under the [Meta Llama 3 Community License](META-LLAMA-3-LICENSE). Weights are downloaded on-demand only upon explicit user consent.
+- **Special Thanks to the Open Source Community:**
+  - [SkinTokens](https://github.com/VAST-AI-Research/SkinTokens) — AI skeleton and skin weight estimation.
+  - [MoCapAnything](https://github.com/mocapanything) — Monocular video-to-motion MoCap.
+  - [mesh2motion-app](https://github.com/Mesh2Motion/mesh2motion-app) — Reference animation datasets.
+  - [meshoptimizer](https://github.com/zeux/meshoptimizer) & `gltfpack` — Geometry compression and LOD generation.
+  - [Excalidraw](https://github.com/excalidraw/excalidraw) — Integrated brainstorming boards.
+  - [ComfyUI](https://github.com/comfyanonymous/ComfyUI) — Generative node graph backend.
+
+---
+
+<div align="center">
+  <b>Built for 3D Artists, Indie Game Developers, and AI Researchers.</b><br>
+  Contributions, issues, and feature suggestions are welcome!
+</div>
